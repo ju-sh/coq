@@ -14,50 +14,54 @@ open Mod_subst
 
 (** [Libobject] declares persistent objects, given with methods:
 
-   * a caching function specifying how to add the object in the current
+
+{ul {- a {i caching function} specifying how to add the object in the current
      scope;
      If the object wishes to register its visibility in the Nametab,
-     it should do so for all possible suffixes.
+     it should do so for all possible suffixes.}
 
-   * a loading function, specifying what to do when the module
+{- a {i loading function}, specifying what to do when the module
      containing the object is loaded;
      If the object wishes to register its visibility in the Nametab,
-     it should do so for all suffixes no shorter than the "int" argument
+     it should do so for all suffixes no shorter than the "int" argument }
 
-   * an opening function, specifying what to do when the module
+{- an {i opening function}, specifying what to do when the module
      containing the object is opened (imported);
      If the object wishes to register its visibility in the Nametab,
-     it should do so for the suffix of the length the "int" argument
+     it should do so for the suffix of the length the "int" argument }
 
-   * a classification function, specifying what to do with the object,
+{- a {i classification function}, specifying what to do with the object,
      when the current module (containing the object) is ended;
      The possibilities are:
-     Dispose    - the object dies at the end of the module
-     Substitute - meaning the object is substitutive and
-                  the module name must be updated
-     Keep       - the object is not substitutive, but survives module
-                  closing
-     Anticipate - this is for objects that have to be explicitly
+
+     {ul {- [Dispose] - the object dies at the end of the module }
+     {- [Substitute] - meaning the object is substitutive and
+                  the module name must be updated }
+     {- [Keep] - the object is not substitutive, but survives module
+                  closing }
+     {- [Anticipate] - this is for objects that have to be explicitly
                   managed by the [end_module] function (like Require
-                  and Read markers)
+                  and Read markers) }}
 
      The classification function is also an occasion for a cleanup
-     (if this function returns Keep or Substitute of some object, the
-     cache method is never called for it)
+     (if this function returns [Keep] or [Substitute] of some object, the
+     cache method is never called for it) }
 
-   * a substitution function, performing the substitution;
+{- a {i substitution function}, performing the substitution;
      this function should be declared for substitutive objects
-     only (see above). NB: the substitution might now be delayed
+     only (see above).
+
+     NB: the substitution might now be delayed
      instead of happening at module creation, so this function
-     should _not_ depend on the current environment
+     should {i not} depend on the current environment }
 
-   * a discharge function, that is applied at section closing time to
+{- a {i discharge function}, that is applied at section closing time to
      collect the data necessary to rebuild the discharged form of the
-     non volatile objects
+     non volatile objects }
 
-   * a rebuild function, that is applied after section closing to
+{- a {i rebuild function}, that is applied after section closing to
      rebuild the non volatile content of a section from the data
-     collected by the discharge function
+     collected by the discharge function }}
 
   Any type defined as a persistent object must be pure (e.g. no references) and
   marshallable by the OCaml Marshal module (e.g. no closures).
@@ -116,9 +120,11 @@ val filter_or :  open_filter -> open_filter -> open_filter
 
 (** The default object is a "Keep" object with empty methods.
    Object creators are advised to use the construction
-   [{(default_object "MY_OBJECT") with
+
+   {[(default_object "MY_OBJECT") with
       cache_function = ...
-   }]
+   ]}
+
    and specify only these functions which are not empty/meaningless
 
 *)
